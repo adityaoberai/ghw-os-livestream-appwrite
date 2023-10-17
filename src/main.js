@@ -5,13 +5,6 @@ import { Client, Databases, ID } from 'node-appwrite';
 export default async ({ req, res }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY']);
 
-  var appwriteClient = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('mlhghw')
-    .setKey(process.env.APPWRITE_API_KEY);
-
-  var appwriteDatabases = new Databases(appwriteClient);
-
   if (req.method === 'GET') {
     return res.send(getStaticFile('index.html'), 200, {
       'Content-Type': 'text/html; charset=utf-8',
@@ -23,14 +16,20 @@ export default async ({ req, res }) => {
   } catch (err) {
     return res.json({ ok: false, error: err.message }, 400);
   }
-
-  const openai = new OpenAIApi(
-    new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-  );
-
   try {
+    const openai = new OpenAIApi(
+      new Configuration({
+        apiKey: process.env.OPENAI_API_KEY,
+      })
+    );
+
+    var appwriteClient = new Client()
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject('mlhghw')
+    .setKey(process.env.APPWRITE_API_KEY);
+
+    var appwriteDatabases = new Databases(appwriteClient);
+
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
@@ -53,6 +52,6 @@ export default async ({ req, res }) => {
     return res.json({ ok: true, completion }, 200);
   } catch (err) {
     error(err.message);
-    return res.json({ ok: false, error: 'Failed to query model.' }, 500);
+    return res.json({ ok: false, error: err.message }, 500);
   }
 };
