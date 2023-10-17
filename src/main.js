@@ -2,7 +2,7 @@ import { OpenAIApi, Configuration } from 'openai';
 import { getStaticFile, throwIfMissing } from './utils.js';
 import { Client, Databases, ID } from 'node-appwrite';
 
-export default async ({ req, res }) => {
+export default async ({ req, res, log, error }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY']);
 
   if (req.method === 'GET') {
