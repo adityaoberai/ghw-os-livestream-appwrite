@@ -3,14 +3,14 @@ import { getStaticFile, throwIfMissing } from './utils.js';
 import { Client, Databases, ID } from 'node-appwrite';
 
 export default async ({ req, res }) => {
-  throwIfMissing(process.env, ['OPENAI_API_KEY', 'APPWRITE_API_KEY']);
+  throwIfMissing(process.env, ['OPENAI_API_KEY']);
 
-  const appwriteClient = new Client()
+  var appwriteClient = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject('mlhghw')
     .setKey(process.env.APPWRITE_API_KEY);
 
-  const appwriteDatabases = new Databases(appwriteClient);
+  var appwriteDatabases = new Databases(appwriteClient);
 
   if (req.method === 'GET') {
     return res.send(getStaticFile('index.html'), 200, {
