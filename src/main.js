@@ -41,10 +41,10 @@ export default async ({ req, res }) => {
     log(completion);
 
     await appwriteDatabases.createDocument(
-      databaseId = 'testdb',
-      collectionId = 'testcoll',
-      documentId = ID.unique(),
-      data = {
+      'testdb',
+      'testcoll',
+      ID.unique(),
+      {
         prompt: req.body.prompt,
         answer: completion
       }
